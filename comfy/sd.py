@@ -22,6 +22,7 @@ from . import sdxl_clip
 import comfy.model_patcher
 import comfy.lora
 import comfy.t2i_adapter.adapter
+import comfy.supported_models_base
 
 def load_model_weights(model, sd):
     m, u = model.load_state_dict(sd, strict=False)
@@ -348,17 +349,19 @@ def load_checkpoint(config_path=None, ckpt_path=None, output_vae=True, output_cl
     class EmptyClass:
         pass
 
-    model_config = EmptyClass()
-    model_config.unet_config = unet_config
+    model_config = comfy.supported_models_base.BASE({})
+
     from . import latent_formats
     model_config.latent_format = latent_formats.SD15(scale_factor=scale_factor)
+    model_config.unet_config = unet_config
 
-    if config['model']["target"].endswith("LatentInpaintDiffusion"):
-        model = model_base.SDInpaint(model_config, model_type=model_type)
-    elif config['model']["target"].endswith("ImageEmbeddingConditionedLatentDiffusion"):
+    if config['model']["target"].endswith("ImageEmbeddingConditionedLatentDiffusion"):
         model = model_base.SD21UNCLIP(model_config, noise_aug_config["params"], model_type=model_type)
     else:
         model = model_base.BaseModel(model_config, model_type=model_type)
+
+    if config['model']["target"].endswith("LatentInpaintDiffusion"):
+        model.set_inpaint()
 
     if fp16:
         model = model.half()
