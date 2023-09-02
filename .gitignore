@@ -14,3 +14,6 @@ venv/
 web/extensions/*
 !web/extensions/logging.js.example
 !web/extensions/core/
+Workflows/
+xtemp/
+ComfyUI.code-workspace
