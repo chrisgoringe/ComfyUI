@@ -11,7 +11,7 @@
             "program": "main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--windows-standalone-build", "--disable-auto-launch"],
+            "args": ["--windows-standalone-build", "--disable-auto-launch", "--use-pytorch-cross-attention"],
             "cwd": "C:/Users/chris/Documents/GitHub/ComfyUI_windows_portable/ComfyUI"
         }
     ]
