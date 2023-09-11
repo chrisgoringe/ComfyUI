@@ -9,6 +9,7 @@ function isConvertableWidget(widget, config) {
 }
 
 function hideWidget(node, widget, suffix = "") {
+	if (widget.type.includes(CONVERTED_TYPE)) { return; } // already hidden, don't do it again
 	widget.origType = widget.type;
 	widget.origComputeSize = widget.computeSize;
 	widget.origSerializeValue = widget.serializeValue;
@@ -161,7 +162,7 @@ app.registerExtension({
 					if (input.widget && !input.widget.config[1]?.forceInput) {
 						const w = this.widgets.find((w) => w.name === input.widget.name);
 						if (w) {
-							hideWidget(this, w);
+							if (!input.widget.config[1]?.defaultInput) hideWidget(this, w);
 						} else {
 							convertToWidget(this, input)
 						}
