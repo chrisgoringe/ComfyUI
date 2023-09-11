@@ -1637,8 +1637,21 @@ export class ComfyApp {
 		if (!extension.name) {
 			throw new Error("Extensions must have a 'name' property.");
 		}
-		if (this.extensions.find((ext) => ext.name === extension.name)) {
-			throw new Error(`Extension named '${extension.name}' already registered.`);
+		const index = app.extensions.findIndex((ext) => extension.name === ext.name);
+		if (index >= 0) {
+			if (extension.version) {
+				var installed_version = 0;
+				if (app.extensions[index].version) { installed_version = app.extensions[index].version; }
+				if (installed_version >= extension.version) {
+					console.log(`${extension.name} version ${installed_version} already installed, won't replace with version ${extension.version}`)
+					return;
+				} else {
+					console.log(`${extension.name} version ${installed_version} being replaced with version ${extension.version}`)
+					app.extensions.splice(index,1); 
+				}	
+			} else {
+				throw new Error(`Extension named '${extension.name}' already registered.`);
+			}
 		}
 		this.extensions.push(extension);
 	}
