@@ -2,7 +2,7 @@ import { api } from "./api.js"
 
 function getNumberDefaults(inputData, defaultStep) {
 	let defaultVal = inputData[1]["default"];
-	let { min, max, step, round } = inputData[1];
+	let { min, max, step } = inputData[1];
 
 	if (defaultVal == undefined) defaultVal = 0;
 	if (min == undefined) min = 0;
