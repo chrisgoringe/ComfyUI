@@ -1,0 +1,50 @@
+** ComfyUI start up time: 2023-09-12 08:18:00.413655
+
+Prestartup times for custom nodes:
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-Manager
+
+Total VRAM 12288 MB, total RAM 32581 MB
+xformers version: 0.0.20
+Set vram state to: NORMAL_VRAM
+Device: cuda:0 NVIDIA GeForce RTX 3060 : cudaMallocAsync
+VAE dtype: torch.bfloat16
+Using pytorch cross attention
+Adding extra search path checkpoints ../../models/Stable-diffusion
+Adding extra search path configs ../../models/Stable-diffusion
+Adding extra search path vae ../../models/VAE
+Adding extra search path unet ../../models/unet
+Adding extra search path loras ../../models/Lora
+Adding extra search path loras ../../models/LyCORIS
+Adding extra search path upscale_models ../../models/ESRGAN
+Adding extra search path upscale_models ../../models/RealESRGAN
+Adding extra search path upscale_models ../../models/SwinIR
+Adding extra search path embeddings ../../models/embeddings
+Adding extra search path hypernetworks ../../models/hypernetworks
+Adding extra search path controlnet ../../models/ControlNet/models
+Adding extra search path controlnet ../../models/ControlNet/control-lora/control-LoRAs-rank128
+Adding extra search path controlnet ../../models/ControlNet/control-lora/control-LoRAs-rank256
+Adding extra search path facerestore ../../models/facerestore_models
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata\__init__.py", line 4, in <module>
+    from .widget_nodes import *
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata\widget_nodes.py", line 5, in <module>
+    from custom_nodes.cg_custom_core.ui_decorator import ui_signal
+ModuleNotFoundError: No module named 'custom_nodes.cg_custom_core'
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata module for custom nodes: No module named 'custom_nodes.cg_custom_core'
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-training-tools\__init__.py", line 4, in <module>
+    from .iterate_images import *
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-training-tools\iterate_images.py", line 2, in <module>
+    from custom_nodes.cg_custom_core.ui_decorator import ui_signal
+ModuleNotFoundError: No module named 'custom_nodes.cg_custom_core'
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-training-tools module for custom nodes: No module named 'custom_nodes.cg_custom_core'

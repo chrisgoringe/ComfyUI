@@ -368,11 +368,6 @@ class PromptExecutor:
             while len(to_execute) > 0:
                 #always execute the output that depends on the least amount of unexecuted nodes first
                 to_execute = sorted(list(map(lambda a: (len(recursive_will_execute(prompt, self.outputs, a[-1])), a[-1]), to_execute)))
-                #except that we execute nodes with higher PRIOIRTY first
-                def priority(prompt, item):
-                    class_ = nodes.NODE_CLASS_MAPPINGS[prompt[item]['class_type']]
-                    return class_.PRIORITY if hasattr(class_, 'PRIORITY') else 0
-                to_execute = sorted( to_execute, key = lambda a : priority(prompt, a[-1]), reverse=True )
                 output_node_id = to_execute.pop(0)[-1]
 
                 # This call shouldn't raise anything if there's an error deep in
@@ -386,8 +381,6 @@ class PromptExecutor:
             for x in executed:
                 self.old_prompt[x] = copy.deepcopy(prompt[x])
             self.server.last_node_id = None
-
-
 
 def validate_inputs(prompt, item, validated):
     unique_id = item
@@ -438,7 +431,7 @@ def validate_inputs(prompt, item, validated):
             o_id = val[0]
             o_class_type = prompt[o_id]['class_type']
             r = nodes.NODE_CLASS_MAPPINGS[o_class_type].RETURN_TYPES
-            if r[val[1]] != type_input and r[val[1]] != '*':
+            if r[val[1]] != type_input:
                 received_type = r[val[1]]
                 details = f"{x}, {received_type} != {type_input}"
                 error = {

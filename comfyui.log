@@ -1,0 +1,141 @@
+** ComfyUI start up time: 2023-09-12 09:03:58.173722
+
+Prestartup times for custom nodes:
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-Manager
+
+Total VRAM 12288 MB, total RAM 32581 MB
+xformers version: 0.0.20
+Set vram state to: NORMAL_VRAM
+Device: cuda:0 NVIDIA GeForce RTX 3060 : cudaMallocAsync
+VAE dtype: torch.bfloat16
+Using pytorch cross attention
+Adding extra search path checkpoints ../../models/Stable-diffusion
+Adding extra search path configs ../../models/Stable-diffusion
+Adding extra search path vae ../../models/VAE
+Adding extra search path unet ../../models/unet
+Adding extra search path loras ../../models/Lora
+Adding extra search path loras ../../models/LyCORIS
+Adding extra search path upscale_models ../../models/ESRGAN
+Adding extra search path upscale_models ../../models/RealESRGAN
+Adding extra search path upscale_models ../../models/SwinIR
+Adding extra search path embeddings ../../models/embeddings
+Adding extra search path hypernetworks ../../models/hypernetworks
+Adding extra search path controlnet ../../models/ControlNet/models
+Adding extra search path controlnet ../../models/ControlNet/control-lora/control-LoRAs-rank128
+Adding extra search path controlnet ../../models/ControlNet/control-lora/control-LoRAs-rank256
+Adding extra search path facerestore ../../models/facerestore_models
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata\__init__.py", line 14, in <module>
+    from .widget_nodes import *
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata\widget_nodes.py", line 2, in <module>
+    from .common import Base_metadata, AlwaysRerun, classproperty
+ImportError: cannot import name 'Base_metadata' from 'cg-metadata.common' (C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata\common.py)
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata module for custom nodes: cannot import name 'Base_metadata' from 'cg-metadata.common' (C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata\common.py)
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 879, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1017, in get_code
+  File "<frozen importlib._bootstrap_external>", line 947, in source_to_code
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-noise\__init__.py", line 10
+    repo.close()sys.path.insert(0,os.path.dirname(os.path.realpath(__file__)))
+                ^^^
+SyntaxError: invalid syntax
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-noise module for custom nodes: invalid syntax (__init__.py, line 10)
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-training-tools\__init__.py", line 14, in <module>
+    from .common import *
+ModuleNotFoundError: No module named 'cg-training-tools.common'
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-training-tools module for custom nodes: No module named 'cg-training-tools.common'
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-utilities\__init__.py", line 20, in <module>
+    from .utilities_passthroughs import *
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-utilities\utilities_passthroughs.py", line 97
+    print f"Added node {key} as passthrough"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: Missing parentheses in call to 'print'. Did you mean print(...)?
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-utilities module for custom nodes: Missing parentheses in call to 'print'. Did you mean print(...)? (utilities_passthroughs.py, line 97)
+### Loading: ComfyUI-Manager (V0.26.2)
+### ComfyUI Revision: 1493 [6af97cb7]
+Imported node: DT_Flatten_Colors
+Imported node: DT_FontText
+Imported node: DT_GenerateNoise
+Imported node: DT_Glitch_This
+Imported node: DT_Hue_Rotation
+Imported node: DT_Load_Picture_Index
+Imported node: DT_PILGram
+Imported node: DT_Pixel_Sort
+Imported node: DT_Play_Sound_At_Execution
+Imported node: DT_PromptGen
+Imported node: DT_Solid_Color
+Imported node: DT_Swap_Color_Mode
+Imported node: DT_Flatten_Colors
+Imported node: DT_FontText
+Imported node: DT_GenerateNoise
+Imported node: DT_Glitch_This
+Imported node: DT_Hue_Rotation
+Imported node: DT_Load_Picture_Index
+Imported node: DT_PILGram
+Imported node: DT_Pixel_Sort
+Imported node: DT_Play_Sound_At_Execution
+Imported node: DT_PromptGen
+Imported node: DT_Solid_Color
+Imported node: DT_Swap_Color_Mode
+Registered sys.path: ['C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\__init__.py', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\custom_pycocotools', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\custom_oneformer', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\custom_mmpkg', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\custom_midas_repo', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\custom_detectron2', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src\\controlnet_aux', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\comfyui_controlnet_aux\\src', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\cg_custom_nodes', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\cg-utilities', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\cg-unprompted-comfy', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\cg-training-tools', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\cg-random', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\custom_nodes\\cg-metadata', 'C:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI\\comfy', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded\\lib\\site-packages\\git\\ext\\gitdb', '', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\ComfyUI', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded\\python310.zip', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded', 'C:\\Users\\chris\\AppData\\Roaming\\Python\\Python310\\site-packages', 'C:\\Users\\chris\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32', 'C:\\Users\\chris\\AppData\\Roaming\\Python\\Python310\\site-packages\\win32\\lib', 'C:\\Users\\chris\\AppData\\Roaming\\Python\\Python310\\site-packages\\Pythonwin', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded\\lib\\site-packages', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded\\lib\\site-packages\\win32', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded\\lib\\site-packages\\win32\\lib', 'c:\\Users\\chris\\Documents\\GitHub\\ComfyUI_windows_portable\\python_embeded\\lib\\site-packages\\Pythonwin', '../..']
+!! Trying to start the node
+Total VRAM 12288 MB, total RAM 32581 MB
+xformers version: 0.0.20
+Set vram state to: NORMAL_VRAM
+Device: cuda:0 NVIDIA GeForce RTX 3060 : cudaMallocAsync
+VAE dtype: torch.bfloat16
+Traceback (most recent call last):
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\nodes.py", line 1725, in load_custom_node
+    module_spec.loader.exec_module(module)
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\prompt_generator.py", line 3, in <module>
+    from preprocess import preprocess
+ModuleNotFoundError: No module named 'preprocess'
+
+Cannot import C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\prompt_generator.py module for custom nodes: No module named 'preprocess'
+
+Import times for custom nodes:
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\reference_only.py
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\sdxl_prompt_styler
+   0.0 seconds (IMPORT FAILED): C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-noise
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\masquerade-nodes-comfyui
+   0.0 seconds (IMPORT FAILED): C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\prompt_generator.py
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg_custom_core
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-random
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-unprompted-comfy
+   0.0 seconds (IMPORT FAILED): C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-training-tools
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg_custom_nodes
+   0.0 seconds (IMPORT FAILED): C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-utilities
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\comfyui_controlnet_aux
+   0.0 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\facerestore
+   0.2 seconds (IMPORT FAILED): C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\cg-metadata
+   0.2 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-Manager
+   0.6 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\clipseg.py
+   1.3 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\ComfyUI-Vextra-Nodes
+   1.8 seconds: C:\Users\chris\Documents\GitHub\ComfyUI_windows_portable\ComfyUI\custom_nodes\facedetailer
+
+Starting server
+
+To see the GUI go to: http://127.0.0.1:8188
