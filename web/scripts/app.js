@@ -1323,6 +1323,7 @@ export class ComfyApp {
 		for (let n of graphData.nodes) {
 			// Patch T2IAdapterLoader to ControlNetLoader since they are the same node now
 			if (n.type == "T2IAdapterLoader") n.type = "ControlNetLoader";
+			if (n.type == "ConditioningAverage ") n.type = "ConditioningAverage"; //typo fix
 
 			// Find missing node types
 			if (!(n.type in LiteGraph.registered_node_types)) {
