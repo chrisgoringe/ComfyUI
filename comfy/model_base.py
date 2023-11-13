@@ -61,7 +61,10 @@ class BaseModel(torch.nn.Module):
         context = context.to(dtype)
         extra_conds = {}
         for o in kwargs:
-            extra_conds[o] = kwargs[o].to(dtype)
+            extra = kwargs[o]
+            if hasattr(extra, "to"):
+                extra = extra.to(dtype)
+            extra_conds[o] = extra
         model_output = self.diffusion_model(xc, t, context=context, control=control, transformer_options=transformer_options, **extra_conds).float()
         return self.model_sampling.calculate_denoised(sigma, model_output, x)
 
@@ -153,6 +156,16 @@ class BaseModel(torch.nn.Module):
 
     def set_inpaint(self):
         self.inpaint_model = True
+
+    def memory_required(self, input_shape):
+        area = input_shape[0] * input_shape[2] * input_shape[3]
+        if comfy.model_management.xformers_enabled() or comfy.model_management.pytorch_attention_flash_attention():
+            #TODO: this needs to be tweaked
+            return (area / (comfy.model_management.dtype_size(self.get_dtype()) * 10)) * (1024 * 1024)
+        else:
+            #TODO: this formula might be too aggressive since I tweaked the sub-quad and split algorithms to use less memory.
+            return (((area * 0.6) / 0.9) + 1024) * (1024 * 1024)
+
 
 def unclip_adm(unclip_conditioning, device, noise_augmentor, noise_augment_merge=0.0):
     adm_inputs = []
