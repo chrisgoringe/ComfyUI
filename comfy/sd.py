@@ -28,36 +28,6 @@ import comfy.t2i_adapter.adapter
 import comfy.supported_models_base
 import comfy.taesd.taesd
 
-def load_model_weights(model, sd):
-    m, u = model.load_state_dict(sd, strict=False)
-    m = set(m)
-    unexpected_keys = set(u)
-
-    k = list(sd.keys())
-    for x in k:
-        if x not in unexpected_keys:
-            w = sd.pop(x)
-            del w
-    if len(m) > 0:
-        logging.warning("missing {}".format(m))
-    return model
-
-def load_clip_weights(model, sd):
-    k = list(sd.keys())
-    for x in k:
-        if x.startswith("cond_stage_model.transformer.") and not x.startswith("cond_stage_model.transformer.text_model."):
-            y = x.replace("cond_stage_model.transformer.", "cond_stage_model.transformer.text_model.")
-            sd[y] = sd.pop(x)
-
-    if 'cond_stage_model.transformer.text_model.embeddings.position_ids' in sd:
-        ids = sd['cond_stage_model.transformer.text_model.embeddings.position_ids']
-        if ids.dtype == torch.float32:
-            sd['cond_stage_model.transformer.text_model.embeddings.position_ids'] = ids.round()
-
-    sd = comfy.utils.clip_text_transformers_convert(sd, "cond_stage_model.model.", "cond_stage_model.transformer.")
-    return load_model_weights(model, sd)
-
-
 def load_lora_for_models(model, clip, lora, strength_model, strength_clip):
     key_map = {}
     if model is not None:
@@ -130,7 +100,7 @@ class CLIP:
     def tokenize(self, text, return_word_ids=False):
         return self.tokenizer.tokenize_with_weights(text, return_word_ids)
 
-    def encode_from_tokens(self, tokens, return_pooled=False):
+    def encode_from_tokens(self, tokens, return_pooled=False, return_dict=False):
         self.cond_stage_model.reset_clip_options()
 
         if self.layer_idx is not None:
@@ -140,7 +110,15 @@ class CLIP:
             self.cond_stage_model.set_clip_options({"projected_pooled": False})
 
         self.load_model()
-        cond, pooled = self.cond_stage_model.encode_token_weights(tokens)
+        o = self.cond_stage_model.encode_token_weights(tokens)
+        cond, pooled = o[:2]
+        if return_dict:
+            out = {"cond": cond, "pooled_output": pooled}
+            if len(o) > 2:
+                for k in o[2]:
+                    out[k] = o[2][k]
+            return out
+
         if return_pooled:
             return cond, pooled
         return cond
@@ -432,9 +410,11 @@ def load_clip(ckpt_paths, embedding_directory=None, clip_type=CLIPType.STABLE_DI
             clip_target.clip = sd2_clip.SD2ClipModel
             clip_target.tokenizer = sd2_clip.SD2Tokenizer
         elif "encoder.block.23.layer.1.DenseReluDense.wi_1.weight" in clip_data[0]:
-            dtype_t5 = clip_data[0]["encoder.block.23.layer.1.DenseReluDense.wi_1.weight"].dtype
-            clip_target.clip = sd3_clip.sd3_clip(clip_l=False, clip_g=False, t5=True, dtype_t5=dtype_t5)
-            clip_target.tokenizer = sd3_clip.SD3Tokenizer
+            weight = clip_data[0]["encoder.block.23.layer.1.DenseReluDense.wi_1.weight"]
+            dtype_t5 = weight.dtype
+            if weight.shape[-1] == 4096:
+                clip_target.clip = sd3_clip.sd3_clip(clip_l=False, clip_g=False, t5=True, dtype_t5=dtype_t5)
+                clip_target.tokenizer = sd3_clip.SD3Tokenizer
         elif "encoder.block.0.layer.0.SelfAttention.k.weight" in clip_data[0]:
             clip_target.clip = sa_t5.SAT5Model
             clip_target.tokenizer = sa_t5.SAT5Tokenizer
