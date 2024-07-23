@@ -19,8 +19,9 @@ from . import model_detection
 from . import sd1_clip
 from . import sd2_clip
 from . import sdxl_clip
-from . import sd3_clip
-from . import sa_t5
+import comfy.text_encoders.sd3_clip
+import comfy.text_encoders.sa_t5
+import comfy.text_encoders.aura_t5
 
 import comfy.model_patcher
 import comfy.lora
@@ -413,24 +414,27 @@ def load_clip(ckpt_paths, embedding_directory=None, clip_type=CLIPType.STABLE_DI
             weight = clip_data[0]["encoder.block.23.layer.1.DenseReluDense.wi_1.weight"]
             dtype_t5 = weight.dtype
             if weight.shape[-1] == 4096:
-                clip_target.clip = sd3_clip.sd3_clip(clip_l=False, clip_g=False, t5=True, dtype_t5=dtype_t5)
-                clip_target.tokenizer = sd3_clip.SD3Tokenizer
+                clip_target.clip = comfy.text_encoders.sd3_clip.sd3_clip(clip_l=False, clip_g=False, t5=True, dtype_t5=dtype_t5)
+                clip_target.tokenizer = comfy.text_encoders.sd3_clip.SD3Tokenizer
+            elif weight.shape[-1] == 2048:
+                clip_target.clip = comfy.text_encoders.aura_t5.AuraT5Model
+                clip_target.tokenizer = comfy.text_encoders.aura_t5.AuraT5Tokenizer
         elif "encoder.block.0.layer.0.SelfAttention.k.weight" in clip_data[0]:
-            clip_target.clip = sa_t5.SAT5Model
-            clip_target.tokenizer = sa_t5.SAT5Tokenizer
+            clip_target.clip = comfy.text_encoders.sa_t5.SAT5Model
+            clip_target.tokenizer = comfy.text_encoders.sa_t5.SAT5Tokenizer
         else:
             clip_target.clip = sd1_clip.SD1ClipModel
             clip_target.tokenizer = sd1_clip.SD1Tokenizer
     elif len(clip_data) == 2:
         if clip_type == CLIPType.SD3:
-            clip_target.clip = sd3_clip.sd3_clip(clip_l=True, clip_g=True, t5=False)
-            clip_target.tokenizer = sd3_clip.SD3Tokenizer
+            clip_target.clip = comfy.text_encoders.sd3_clip.sd3_clip(clip_l=True, clip_g=True, t5=False)
+            clip_target.tokenizer = comfy.text_encoders.sd3_clip.SD3Tokenizer
         else:
             clip_target.clip = sdxl_clip.SDXLClipModel
             clip_target.tokenizer = sdxl_clip.SDXLTokenizer
     elif len(clip_data) == 3:
-        clip_target.clip = sd3_clip.SD3ClipModel
-        clip_target.tokenizer = sd3_clip.SD3Tokenizer
+        clip_target.clip = comfy.text_encoders.sd3_clip.SD3ClipModel
+        clip_target.tokenizer = comfy.text_encoders.sd3_clip.SD3Tokenizer
 
     clip = CLIP(clip_target, embedding_directory=embedding_directory)
     for c in clip_data:
@@ -489,12 +493,12 @@ def load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, o
     load_device = model_management.get_torch_device()
 
     model_config = model_detection.model_config_from_unet(sd, diffusion_model_prefix)
+    if model_config is None:
+        raise RuntimeError("ERROR: Could not detect model type of: {}".format(ckpt_path))
+
     unet_dtype = model_management.unet_dtype(model_params=parameters, supported_dtypes=model_config.supported_inference_dtypes)
     manual_cast_dtype = model_management.unet_manual_cast(unet_dtype, load_device, model_config.supported_inference_dtypes)
     model_config.set_inference_dtype(unet_dtype, manual_cast_dtype)
-
-    if model_config is None:
-        raise RuntimeError("ERROR: Could not detect model type of: {}".format(ckpt_path))
 
     if model_config.clip_vision_prefix is not None:
         if output_clipvision:
@@ -546,42 +550,37 @@ def load_checkpoint_guess_config(ckpt_path, output_vae=True, output_clip=True, o
 def load_unet_state_dict(sd): #load unet in diffusers or regular format
 
     #Allow loading unets from checkpoint files
-    checkpoint = False
     diffusion_model_prefix = model_detection.unet_prefix_from_state_dict(sd)
     temp_sd = comfy.utils.state_dict_prefix_replace(sd, {diffusion_model_prefix: ""}, filter_keys=True)
     if len(temp_sd) > 0:
         sd = temp_sd
-        checkpoint = True
 
     parameters = comfy.utils.calculate_parameters(sd)
     unet_dtype = model_management.unet_dtype(model_params=parameters)
     load_device = model_management.get_torch_device()
+    model_config = model_detection.model_config_from_unet(sd, "")
 
-    if checkpoint or "input_blocks.0.0.weight" in sd or 'clf.1.weight' in sd: #ldm or stable cascade
-        model_config = model_detection.model_config_from_unet(sd, "")
-        if model_config is None:
-            return None
+    if model_config is not None:
         new_sd = sd
-    elif 'transformer_blocks.0.attn.add_q_proj.weight' in sd: #MMDIT SD3
+    else:
         new_sd = model_detection.convert_diffusers_mmdit(sd, "")
-        if new_sd is None:
-            return None
-        model_config = model_detection.model_config_from_unet(new_sd, "")
-        if model_config is None:
-            return None
-    else: #diffusers
-        model_config = model_detection.model_config_from_diffusers_unet(sd)
-        if model_config is None:
-            return None
+        if new_sd is not None: #diffusers mmdit
+            model_config = model_detection.model_config_from_unet(new_sd, "")
+            if model_config is None:
+                return None
+        else: #diffusers unet
+            model_config = model_detection.model_config_from_diffusers_unet(sd)
+            if model_config is None:
+                return None
 
-        diffusers_keys = comfy.utils.unet_to_diffusers(model_config.unet_config)
+            diffusers_keys = comfy.utils.unet_to_diffusers(model_config.unet_config)
 
-        new_sd = {}
-        for k in diffusers_keys:
-            if k in sd:
-                new_sd[diffusers_keys[k]] = sd.pop(k)
-            else:
-                logging.warning("{} {}".format(diffusers_keys[k], k))
+            new_sd = {}
+            for k in diffusers_keys:
+                if k in sd:
+                    new_sd[diffusers_keys[k]] = sd.pop(k)
+                else:
+                    logging.warning("{} {}".format(diffusers_keys[k], k))
 
     offload_device = model_management.unet_offload_device()
     unet_dtype = model_management.unet_dtype(model_params=parameters, supported_dtypes=model_config.supported_inference_dtypes)
