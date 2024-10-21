@@ -94,11 +94,20 @@ class SDClipModel(torch.nn.Module, ClipTokenWeightEncoder):
             config = json.load(f)
 
         operations = model_options.get("custom_operations", None)
+        scaled_fp8 = None
+
         if operations is None:
-            operations = comfy.ops.manual_cast
+            scaled_fp8 = model_options.get("scaled_fp8", None)
+            if scaled_fp8 is not None:
+                operations = comfy.ops.scaled_fp8_ops(fp8_matrix_mult=False, override_dtype=scaled_fp8)
+            else:
+                operations = comfy.ops.manual_cast
 
         self.operations = operations
         self.transformer = model_class(config, dtype, device, self.operations)
+        if scaled_fp8 is not None:
+            self.transformer.scaled_fp8 = torch.nn.Parameter(torch.tensor([], dtype=scaled_fp8))
+
         self.num_layers = self.transformer.num_layers
 
         self.max_length = max_length
@@ -405,7 +414,7 @@ class SDTokenizer:
     def __init__(self, tokenizer_path=None, max_length=77, pad_with_end=True, embedding_directory=None, embedding_size=768, embedding_key='clip_l', tokenizer_class=CLIPTokenizer, has_start_token=True, pad_to_max_length=True, min_length=None, pad_token=None, tokenizer_data={}):
         if tokenizer_path is None:
             tokenizer_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "sd1_tokenizer")
-        self.tokenizer = tokenizer_class.from_pretrained(tokenizer_path, clean_up_tokenization_spaces=True) # Fix Transformers FutureWarning by explicitly setting clean_up_tokenization_spaces to True
+        self.tokenizer = tokenizer_class.from_pretrained(tokenizer_path)
         self.max_length = max_length
         self.min_length = min_length
 
